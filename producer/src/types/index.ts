@@ -9,6 +9,5 @@ export interface Notification {
 }
 
 export interface DataType<T = Record<string, any>> {
-  template: string;
   variables: T
 }

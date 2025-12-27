@@ -1,12 +1,12 @@
 import { SendEmailCommand, SendEmailCommandInput } from "@aws-sdk/client-ses";
-import { EMAIL_DATA, OTP_DATA } from "../types";
+import { EMAIL_DATA, EmailTemplate, OTP_DATA } from "../types";
 import { EMAIL_SUBJECT_MAP, SES_EMAIL, TEMPLATE_DIR } from "../constants";
 import fs from "fs";
 import path from "path";
 import { sesClient } from "../config/ses.config";
 
-export const sendEmail = async (reciever: string, data: EMAIL_DATA) => {
-  const { template, variables } = data;
+export const sendEmail = async (template: EmailTemplate,reciever: string, data: EMAIL_DATA) => {
+  const { variables } = data;
   if (!EMAIL_SUBJECT_MAP[template]) {
     throw new Error(`Unknown email template: ${template}`);
   }

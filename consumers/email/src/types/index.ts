@@ -2,21 +2,20 @@ export interface Notification {
   userId: string;
   clientId: string;
   reciever: string;
-  eventType: "AUTH_OTP" | "LOGIN_ALERT" | "NEWSLETTER";
+  eventType: NotificationEventType;
   data: EMAIL_DATA;
   channels: ("email" | "sms" | "whatsapp" | "push")[];
   priority: "high" | "medium" | "low";
 }
 
 export interface EMAIL_DATA {
-    template: EmailTemplate;
-    variables: OTP_DATA | Record<string, string | number>;
+  variables: OTP_DATA | Record<string, string | number>;
 }
 
 export interface OTP_DATA {
-    otp: number;
-    expiresIn: string;
-    service: string;
+  otp: number;
+  expiresIn: string;
+  service: string;
 }
 
 export type EmailTemplate =
@@ -24,3 +23,9 @@ export type EmailTemplate =
   | "login_alert"
   | "password_reset"
   | "newsletter";
+
+export type NotificationEventType =
+  | "AUTH_OTP"
+  | "LOGIN_ALERT"
+  | "NEWSLETTER"
+  | "PASSWORD_RESET";
