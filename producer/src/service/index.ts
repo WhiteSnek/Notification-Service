@@ -1,4 +1,4 @@
-import { Notification } from "../../types";
+import { Notification } from "../types";
 import { snsClient } from "../config/sns.config";
 import { PublishCommand } from "@aws-sdk/client-sns";
 

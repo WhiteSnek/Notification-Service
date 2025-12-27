@@ -1,10 +1,14 @@
-export interface Notification<T = Record<string, any>> {
+export interface Notification {
   userId: string;
   clientId: string;
-  sender: string;
   reciever: string;
   eventType: "AUTH_OTP" | "LOGIN_ALERT" | "NEWSLETTER";
-  data: T;
+  data: DataType;
   channels: ("email" | "sms" | "whatsapp" | "push")[];
   priority: "high" | "medium" | "low";
+}
+
+export interface DataType<T = Record<string, any>> {
+  template: string;
+  variables: T
 }

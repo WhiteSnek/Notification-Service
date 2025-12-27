@@ -44,7 +44,6 @@ class Controller {
         data: data.data,
         channels: data.channels || allowedChannels,
         priority: data.priority || "low",
-        sender: data.sender,
         reciever: data.reciever,
         clientId,
       };
