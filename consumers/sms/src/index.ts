@@ -1,6 +1,6 @@
 import { DeleteMessageCommand, ReceiveMessageCommand } from "@aws-sdk/client-sqs";
 import dotenv from "dotenv";
-import { QUEUE_URL } from "./constants"
+import { EVENT_TO_SMS_TEMPLATE, QUEUE_URL } from "./constants"
 import { sqsClient } from "./config/sqs.config";
 import { Notification } from "./types";
 import { sendSMS } from "./utils";
@@ -23,13 +23,13 @@ async function init() {
             const {Body} = message;
             if (!Body) continue;
             const data: Notification = JSON.parse(Body)
-            // DO SOMETHING
+            
             console.log(data)
-            sendSMS()
-            // await sqsClient.send(new DeleteMessageCommand({
-            //   QueueUrl: QUEUE_URL,
-            //   ReceiptHandle: message.ReceiptHandle
-            // }))
+            sendSMS(data.eventType, data.reciever, data.data)
+            await sqsClient.send(new DeleteMessageCommand({
+              QueueUrl: QUEUE_URL,
+              ReceiptHandle: message.ReceiptHandle
+            }))
         }
     } catch (error) {
         console.log(error)

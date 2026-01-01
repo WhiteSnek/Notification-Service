@@ -18,7 +18,7 @@ export interface OTP_DATA {
   service: string;
 }
 
-export type EmailTemplate =
+export type SMSTemplate =
   | "auth_otp"
   | "login_alert"
   | "password_reset"
@@ -26,6 +26,4 @@ export type EmailTemplate =
 
 export type NotificationEventType =
   | "AUTH_OTP"
-  | "LOGIN_ALERT"
-  | "NEWSLETTER"
-  | "PASSWORD_RESET";
+
