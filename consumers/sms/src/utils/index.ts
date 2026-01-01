@@ -9,11 +9,9 @@ export const sendSMS = async (eventType: NotificationEventType,reciever: string,
         throw new Error(`No SMS template found for event: ${eventType}`);
     }
     const smsText = template.render(variables)
-    const message = await twilioClient.messages.create({
+    await twilioClient.messages.create({
         body: smsText,
         from: process.env.TWILIO_PHONE_NO,
         to: reciever
     })
-
-    console.log(message)
 }

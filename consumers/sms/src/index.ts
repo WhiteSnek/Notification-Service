@@ -23,8 +23,6 @@ async function init() {
             const {Body} = message;
             if (!Body) continue;
             const data: Notification = JSON.parse(Body)
-            
-            console.log(data)
             sendSMS(data.eventType, data.reciever, data.data)
             await sqsClient.send(new DeleteMessageCommand({
               QueueUrl: QUEUE_URL,
