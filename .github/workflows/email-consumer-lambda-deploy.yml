@@ -12,7 +12,7 @@ jobs:
 
     defaults:
       run:
-        working-directory: consumer/email
+        working-directory: consumers/email
 
     steps:
       - name: Checkout repository
