@@ -3,3 +3,4 @@ node_modules
 *.txt
 *.pem
 nodemon.json
+dist/
