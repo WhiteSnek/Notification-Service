@@ -4,6 +4,9 @@ on:
   push:
     branches:
       - main
+    paths:
+      - 'consumers/email/**'
+      - ".github/workflows/email-consumer-lambda-deploy.yml"
 
 jobs:
   deploy:
@@ -30,6 +33,11 @@ jobs:
 
       - name: Build TypeScript
         run: npm run build
+      
+      - name: Copy email templates
+        run: |
+          mkdir -p dist/templates
+          cp -r src/templates/* dist/templates/
 
       - name: Remove development dependencies
         run: npm prune --omit=dev

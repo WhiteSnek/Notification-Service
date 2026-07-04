@@ -4,6 +4,9 @@ on:
   push:
     branches:
       - main
+    paths:
+      - 'producer/**'
+      - ".github/workflows/producer-lambda-deploy.yml"
 
 jobs:
   deploy:
