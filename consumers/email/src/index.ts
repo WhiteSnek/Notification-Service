@@ -1,39 +1,40 @@
-import { DeleteMessageCommand, ReceiveMessageCommand } from "@aws-sdk/client-sqs";
+import { SQSEvent, SQSBatchResponse, SQSBatchItemFailure } from "aws-lambda";
 import dotenv from "dotenv";
-import { EVENT_TO_EMAIL_TEMPLATE, QUEUE_URL } from "./constants";
-import { sqsClient } from "./config/sqs.config";
+import { EVENT_TO_EMAIL_TEMPLATE } from "./constants";
 import { sendEmail } from "./utils";
 import { Notification } from "./types";
 
 dotenv.config();
 
-async function init() {
-  const command = new ReceiveMessageCommand({
-    QueueUrl: QUEUE_URL,
-    MaxNumberOfMessages: 1,
-    WaitTimeSeconds: 20,
-  });
-  while (true) {
-    const { Messages } = await sqsClient.send(command);
-    if (!Messages) {
-      continue;
-    }
+export const handler = async (
+  event: SQSEvent
+): Promise<SQSBatchResponse> => {
+  const batchItemFailures: SQSBatchItemFailure[] = [];
+
+  for (const record of event.Records) {
     try {
-        for(const message of Messages){
-            const {Body} = message;
-            if (!Body) continue;
-            const data: Notification = JSON.parse(Body)
-            const template = EVENT_TO_EMAIL_TEMPLATE[data.eventType]
-            await sendEmail(template, data.reciever, data.data)
-            await sqsClient.send(new DeleteMessageCommand({
-              QueueUrl: QUEUE_URL,
-              ReceiptHandle: message.ReceiptHandle
-            }))
-        }
+      const data: Notification = JSON.parse(record.body);
+
+      const template = EVENT_TO_EMAIL_TEMPLATE[data.eventType];
+
+      await sendEmail(
+        template,
+        data.reciever,
+        data.data
+      );
     } catch (error) {
-        console.log(error)
+      console.error(
+        `Failed to process message ${record.messageId}:`,
+        error
+      );
+
+      batchItemFailures.push({
+        itemIdentifier: record.messageId,
+      });
     }
   }
-}
 
-init()
+  return {
+    batchItemFailures,
+  };
+};
