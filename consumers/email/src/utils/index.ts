@@ -6,8 +6,9 @@ import path from "path";
 import { getTemplate } from "./bucket";
 import { sesClient } from "../config/ses.config";
 
-export const sendEmail = async (template: EmailTemplate, clientId: string, reciever: string, data: EMAIL_DATA) => {
+export const sendEmail = async (eventType: string, clientId: string, reciever: string, data: EMAIL_DATA) => {
   const { variables } = data;
+  const template = eventType.toLowerCase() as EmailTemplate;
   if (!EMAIL_SUBJECT_MAP[template]) {
     throw new Error(`Unknown email template: ${template}`);
   }

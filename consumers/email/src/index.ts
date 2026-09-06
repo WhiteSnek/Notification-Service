@@ -15,10 +15,8 @@ export const handler = async (
     try {
       const data: Notification = JSON.parse(record.body);
 
-      const template = EVENT_TO_EMAIL_TEMPLATE[data.eventType];
-
       await sendEmail(
-        template,
+        data.eventType,
         data.clientId,
         data.reciever,
         data.data

@@ -1,6 +1,8 @@
 import { S3Client, GetObjectCommand, PutObjectCommand } from "@aws-sdk/client-s3"
 
-const s3Client = new S3Client({});
+export const s3Client = new S3Client({
+  region: process.env.AWS_REGION,
+});
 
 const BUCKET_NAME = process.env.BUCKET_NAME || "";
 
@@ -20,4 +22,18 @@ const getTemplate = async(templateName: string, service: string) => {
     return response.Body;
 }
 
-export { getTemplate }
+const getTemplateMetadata = async() => {
+    const command = new GetObjectCommand({
+        Bucket: BUCKET_NAME,
+        Key: "templates/metadata.json"
+    });
+
+    const response = await s3Client.send(command);
+    if (!response.Body) {
+        throw new Error(`Metadata not found in bucket ${BUCKET_NAME}`);
+    }
+    const metadata = await response.Body.transformToString();
+    return JSON.parse(metadata);
+}
+
+export { getTemplate, getTemplateMetadata };
