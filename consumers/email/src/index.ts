@@ -19,6 +19,7 @@ export const handler = async (
 
       await sendEmail(
         template,
+        data.clientId,
         data.reciever,
         data.data
       );
