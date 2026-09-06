@@ -1,18 +1,17 @@
 import { SendEmailCommand, SendEmailCommandInput } from "@aws-sdk/client-ses";
 import { EMAIL_DATA, EmailTemplate, OTP_DATA } from "../types";
-import { EMAIL_SUBJECT_MAP, SES_EMAIL, TEMPLATE_DIR } from "../constants";
-import fs from "fs";
-import path from "path";
-import { getTemplate } from "./bucket";
+import { SES_EMAIL } from "../constants";
+import { getTemplate, getTemplateMetadata } from "./bucket";
 import { sesClient } from "../config/ses.config";
 
 export const sendEmail = async (eventType: string, clientId: string, reciever: string, data: EMAIL_DATA) => {
   const { variables } = data;
   const template = eventType.toLowerCase() as EmailTemplate;
-  if (!EMAIL_SUBJECT_MAP[template]) {
+  const metadata = await getTemplateMetadata(clientId);
+  if (!metadata[template]) {
     throw new Error(`Unknown email template: ${template}`);
   }
-  const subject = EMAIL_SUBJECT_MAP[template];
+  const subject = metadata[template].subject;
   const html = await renderTemplate(template, clientId, variables);
   const params: SendEmailCommandInput = {
     Source: SES_EMAIL,

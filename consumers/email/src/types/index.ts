@@ -18,6 +18,12 @@ export interface OTP_DATA {
   service: string;
 }
 
+export type EmailTemplateMetadata = {
+  subject: string;
+};
+
+export type EmailMetadata = Record<EmailTemplate, EmailTemplateMetadata>;
+
 export type EmailTemplate =
   | "auth_otp"
   | "login_alert"

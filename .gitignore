@@ -4,3 +4,4 @@ node_modules
 *.pem
 nodemon.json
 dist/
+templates/

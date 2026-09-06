@@ -1,6 +1,5 @@
 import { SQSEvent, SQSBatchResponse, SQSBatchItemFailure } from "aws-lambda";
 import dotenv from "dotenv";
-import { EVENT_TO_EMAIL_TEMPLATE } from "./constants";
 import { sendEmail } from "./utils";
 import { Notification } from "./types";
 
