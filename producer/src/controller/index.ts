@@ -75,11 +75,7 @@ class Controller {
   async addTemplate(req: Request, res: Response) {
     try{
       const data = templateSchema.parse(req.body);
-      const clientId = req.clientId;
-      if (!clientId) {
-        return res.status(401).json(new ApiResponse(401, {}, "Unauthorized!"));
-      }
-      const response = await this.service.addTemplate(data, clientId);
+      const response = await this.service.addTemplate(data);
       return res
         .status(200)
         .json(new ApiResponse(200, response, "Template added successfully!"));

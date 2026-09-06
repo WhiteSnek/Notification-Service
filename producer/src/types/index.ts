@@ -15,5 +15,6 @@ export interface DataType<T = Record<string, any>> {
 export interface Template {
   subject: string;
   eventName: string;
+  clientId: string;
   channel: "email" | "sms" | "whatsapp" | "push";
 }

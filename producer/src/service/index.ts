@@ -35,9 +35,9 @@ class Service {
     }
   }
 
-  async addTemplate(data: Template, clientId: string) {
+  async addTemplate(data: Template) {
     try {
-      const { subject, eventName, channel } = data;
+      const { subject, eventName,clientId, channel } = data;
 
       const metadata = await getMetadata(channel, clientId);
 

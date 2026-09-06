@@ -18,5 +18,6 @@ export const notificationSchema = z.object({
 export const templateSchema = z.object({
   subject: z.string().min(1),
   eventName: z.string().min(1),
+  clientId: z.string().min(1),
   channel: z.enum(["email", "sms", "whatsapp", "push"])
 });
