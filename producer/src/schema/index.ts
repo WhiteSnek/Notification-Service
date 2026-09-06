@@ -14,3 +14,9 @@ export const notificationSchema = z.object({
   channels: z.array(z.enum(["email", "sms", "whatsapp", "push"])).optional(),
   priority: z.enum(["high", "medium", "low"]).optional()
 });
+
+export const templateSchema = z.object({
+  subject: z.string().min(1),
+  eventName: z.string().min(1),
+  channel: z.enum(["email", "sms", "whatsapp", "push"])
+});

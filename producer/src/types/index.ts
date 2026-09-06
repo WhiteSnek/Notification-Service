@@ -11,3 +11,9 @@ export interface Notification {
 export interface DataType<T = Record<string, any>> {
   variables: T
 }
+
+export interface Template {
+  subject: string;
+  eventName: string;
+  channel: "email" | "sms" | "whatsapp" | "push";
+}

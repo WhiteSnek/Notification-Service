@@ -1,6 +1,11 @@
-import { Notification } from "../types";
+import { Notification, Template } from "../types";
 import { snsClient } from "../config/sns.config";
 import { PublishCommand } from "@aws-sdk/client-sns";
+import {
+  getMetadata,
+  saveMetadata,
+  getUploadPresignedUrl,
+} from "../utils/bucket";
 
 class Service {
   async sendNotification(data: Notification) {
@@ -26,6 +31,37 @@ class Service {
       console.log("Message published to SNS!");
     } catch (error) {
       console.error("Failed to publish message to SNS", error);
+      throw error;
+    }
+  }
+
+  async addTemplate(data: Template, clientId: string) {
+    try {
+      const { subject, eventName, channel } = data;
+
+      const metadata = await getMetadata(channel, clientId);
+
+      metadata[eventName] = {
+        subject,
+      };
+
+      await saveMetadata(channel, clientId, metadata);
+
+      const templateKey = `templates/${channel}/${clientId}/${eventName}.html`;
+
+      const presignedUrl = await getUploadPresignedUrl(
+        templateKey,
+        "text/html",
+      );
+      return {
+        eventName,
+        channel,
+        subject,
+        key: templateKey,
+        presignedUrl,
+      };
+    } catch (error) {
+      console.error("Failed to add template", error);
       throw error;
     }
   }
